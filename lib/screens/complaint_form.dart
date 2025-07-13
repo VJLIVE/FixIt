@@ -27,8 +27,40 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   bool _loading = false;
 
-  Future<void> _pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+  Future<void> _showImageSourcePicker() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take a Photo'),
+              onTap: () {
+                Navigator.of(context).pop();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Navigator.of(context).pop();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picked = await ImagePicker().pickImage(source: source);
     if (picked != null) {
       setState(() => _pickedImage = File(picked.path));
     }
@@ -214,7 +246,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
             ),
             const SizedBox(height: 8),
             GestureDetector(
-              onTap: _pickImage,
+              onTap: _showImageSourcePicker,
               child: Container(
                 width: double.infinity,
                 height: 180,
