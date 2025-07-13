@@ -84,37 +84,63 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  isLogin ? "Login" : "Sign Up",
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
+                Image.asset(
+                  "assets/logo.png",
+                  height: 120,
                 ),
                 const SizedBox(height: 20),
+                Text(
+                  isLogin ? "Welcome Back" : "Create Account",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  isLogin
+                      ? "Login to continue"
+                      : "Sign up to get started",
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 30),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: "Email"),
+                  decoration: const InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                  ),
                   validator: (val) => val!.isEmpty ? "Enter email" : null,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(labelText: "Password"),
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                  ),
                   obscureText: true,
-                  validator: (val) => val!.length < 6 ? "Password too short" : null,
+                  validator: (val) =>
+                  val!.length < 6 ? "Password too short" : null,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 if (loading)
                   const CircularProgressIndicator()
                 else
-                  ElevatedButton(
-                    onPressed: loginOrSignup,
-                    child: Text(isLogin ? "Login" : "Sign Up"),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: loginOrSignup,
+                      child: Text(isLogin ? "Login" : "Sign Up"),
+                    ),
                   ),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: toggleForm,
                   child: Text(
@@ -123,14 +149,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         : "Already have an account? Login",
                   ),
                 ),
+                const SizedBox(height: 20),
+                const Text(
+                  "or",
+                  style: TextStyle(color: Colors.grey),
+                ),
                 const SizedBox(height: 10),
-                const Text("OR"),
-                const SizedBox(height: 10),
-                OutlinedButton.icon(
-                  onPressed: signInWithGoogle,
-                  icon: Image.asset("assets/google.png", height: 20),
-                  label: const Text("Sign in with Google"),
-                )
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: signInWithGoogle,
+                    icon: Image.asset(
+                      "assets/google.png",
+                      height: 20,
+                    ),
+                    label: const Text("Sign in with Google"),
+                  ),
+                ),
               ],
             ),
           ),
