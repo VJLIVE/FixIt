@@ -90,112 +90,171 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               const FlutterLogo(size: 80),
+              const SizedBox(height: 16),
+              Text(
+                isLogin ? 'Welcome Back' : 'Create an Account',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                isLogin
+                    ? 'Login to your account'
+                    : 'Sign up to get started',
+                style: theme.textTheme.bodyMedium,
+              ),
               const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    )
+                  ],
                 ),
-                child: Row(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                   children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => toggle(true),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: isLogin ? Colors.blue : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "Login",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: isLogin ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.bold,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => toggle(true),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: isLogin
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                "Login",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: isLogin
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => toggle(false),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: !isLogin ? Colors.blue : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "Signup",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: !isLogin ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => toggle(false),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: !isLogin
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                "Signup",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: !isLogin
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    if (!isLogin) ...[
+                      TextField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          labelText: "Full Name",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: _branchController,
+                        decoration: const InputDecoration(
+                          labelText: "Branch",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: "Email",
+                        border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Password",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: handleAuth,
+                        child: Text(
+                          isLogin ? "Login" : "Signup",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text("or", style: TextStyle(color: Colors.grey)),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.g_mobiledata, size: 24),
+                        label: const Text("Sign in with Google"),
+                        onPressed: signInWithGoogle,
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              if (!isLogin) ...[
-                TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                      labelText: "Name", border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _branchController,
-                  decoration: const InputDecoration(
-                      labelText: "Branch", border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 12),
-              ],
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                    labelText: "Email", border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                    labelText: "Password", border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: handleAuth,
-                  child: Text(isLogin ? "Login" : "Signup"),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text("or"),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.g_mobiledata, size: 24),
-                  label: const Text("Sign in with Google"),
-                  onPressed: signInWithGoogle,
-                ),
-              )
             ],
           ),
         ),
