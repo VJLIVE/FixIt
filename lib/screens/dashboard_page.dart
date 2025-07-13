@@ -15,8 +15,6 @@ class _DashboardPageState extends State<DashboardPage> {
   final firestore = FirebaseFirestore.instance;
 
   String name = '';
-  String email = '';
-  String branch = '';
 
   @override
   void initState() {
@@ -30,21 +28,40 @@ class _DashboardPageState extends State<DashboardPage> {
 
     if (doc.exists) {
       setState(() {
-        name = doc['name'];
-        email = doc['email'];
-        branch = doc['branch'];
+        name = _formatName(doc['name']);
       });
     }
+  }
+
+  String _formatName(String value) {
+    if (value.isEmpty) return value;
+
+    return value
+        .split(' ')
+        .map((word) =>
+    word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1).toLowerCase())
+        .join(' ');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: const Text("Dashboard"),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Welcome, $name!',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.red),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushReplacement(
@@ -55,13 +72,105 @@ class _DashboardPageState extends State<DashboardPage> {
           )
         ],
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Name: $name", style: const TextStyle(fontSize: 20)),
-            Text("Email: $email", style: const TextStyle(fontSize: 20)),
-            Text("Branch: $branch", style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 80,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'You are successfully logged in!',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Explore the app and enjoy your experience.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView(
+                children: [
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Profile'),
+                      subtitle: const Text('View or edit your profile info'),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profile tapped')),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const Text('Settings'),
+                      subtitle: const Text('Manage your preferences'),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Settings tapped')),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.help_outline),
+                      title: const Text('Help & Support'),
+                      subtitle: const Text('Get assistance'),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Help tapped')),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
