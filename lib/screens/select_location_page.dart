@@ -59,7 +59,7 @@ class _PinLocationScreenState extends State<PinLocationScreen> {
         CameraUpdate.newLatLngZoom(latLng, 17),
       );
     } catch (e) {
-      // fallback to a default location if current not available
+      // fallback to default
       const defaultLatLng = LatLng(20.5937, 78.9629);
       _setMarker(defaultLatLng);
 
@@ -100,15 +100,23 @@ class _PinLocationScreenState extends State<PinLocationScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Select Location")),
+      appBar: AppBar(
+        title: const Text(
+          "Select Location",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Stack(
         children: [
+          /// Google Map
           GoogleMap(
             onMapCreated: (controller) {
               _mapController = controller;
             },
             initialCameraPosition: const CameraPosition(
-              target: LatLng(20.5937, 78.9629), // India center as default
+              target: LatLng(20.5937, 78.9629),
               zoom: 5,
             ),
             markers: _markers,
@@ -118,13 +126,47 @@ class _PinLocationScreenState extends State<PinLocationScreen> {
               _setMarker(latLng);
             },
           ),
+
+          /// Optional overlay at center
+          if (_selectedLatLng != null)
+            Positioned(
+              top: 20,
+              left: 20,
+              right: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'Selected: ${_selectedLatLng!.latitude.toStringAsFixed(4)}, ${_selectedLatLng!.longitude.toStringAsFixed(4)}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ),
+            ),
+
+          /// Confirm Button
           Positioned(
             bottom: 20,
             left: 20,
             right: 20,
-            child: ElevatedButton(
-              onPressed: _confirmLocation,
-              child: const Text("✅ Use This Location"),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _confirmLocation,
+                icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+                label: const Text("Use This Location", style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
           )
         ],
