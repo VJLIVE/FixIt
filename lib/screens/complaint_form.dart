@@ -38,8 +38,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
     const cloudName = 'dgiqmo1t1';
     const uploadPreset = 'flutter_unsigned';
 
-    final uri = Uri.parse(
-        'https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+    final uri =
+    Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
 
     final request = http.MultipartRequest('POST', uri)
       ..fields['upload_preset'] = uploadPreset
@@ -62,7 +62,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
         _pickedImage == null ||
         _selectedLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Fill all fields, pick image & location')),
+        const SnackBar(
+            content: Text('Please fill all fields, pick image & location')),
       );
       return;
     }
@@ -70,8 +71,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
     setState(() => _loading = true);
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    final docRef =
-    FirebaseFirestore.instance.collection('complaints').doc();
+    final docRef = FirebaseFirestore.instance.collection('complaints').doc();
 
     final imgUrl = await _uploadToCloudinary(_pickedImage!);
 
@@ -102,24 +102,21 @@ class _ComplaintFormState extends State<ComplaintForm> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Success'),
-        content: const Text('Complaint submitted successfully!'),
+        title: const Text('✅ Success'),
+        content: const Text('Your complaint was submitted successfully.'),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(); // close the dialog
-            },
+            onPressed: () => Navigator.of(ctx).pop(),
             child: const Text('OK'),
           ),
         ],
       ),
     );
 
-    // then navigate to home page
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const DashboardPage()), // replace HomePage with your actual widget
-          (route) => false, // remove all previous routes
+      MaterialPageRoute(builder: (_) => const DashboardPage()),
+          (route) => false,
     );
   }
 
@@ -134,11 +131,11 @@ class _ComplaintFormState extends State<ComplaintForm> {
     if (result != null) {
       setState(() {
         _selectedLocation = result;
-        _address = null; // clear old address
+        _address = null;
       });
 
-      final placemarks = await placemarkFromCoordinates(
-          result.latitude, result.longitude);
+      final placemarks =
+      await placemarkFromCoordinates(result.latitude, result.longitude);
 
       if (placemarks.isNotEmpty) {
         final place = placemarks.first;
@@ -153,69 +150,148 @@ class _ComplaintFormState extends State<ComplaintForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Raise a Complaint')),
-      body: SingleChildScrollView(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const DashboardPage()),
+                  (route) => false,
+            );
+          },
+        ),
+        title: const Text(
+          "Raise Complaint",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              "Describe the issue",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: 'Title',
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _descController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: 'Description',
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
               maxLines: 4,
             ),
-            const SizedBox(height: 12),
-            if (_pickedImage != null)
-              Image.file(_pickedImage!, height: 150),
-            TextButton.icon(
-              onPressed: _pickImage,
-              icon: const Icon(Icons.camera_alt),
-              label: const Text('Pick Image'),
+            const SizedBox(height: 24),
+
+            Text(
+              "Attach an Image",
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 12),
-            if (_selectedLocation != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_address != null && _address!.isNotEmpty)
-                    Text(
-                      '📍 Selected Address: $_address',
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  else
-                    Text(
-                      '📍 Selected Coordinates: ${_selectedLocation!.latitude}, ${_selectedLocation!.longitude}',
-                    )
-                ],
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                width: double.infinity,
+                height: 180,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[100],
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: _pickedImage != null
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    _pickedImage!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                )
+                    : const Center(
+                  child: Icon(Icons.camera_alt,
+                      size: 40, color: Colors.grey),
+                ),
               ),
-            ElevatedButton.icon(
-              onPressed: _pickLocation,
-              icon: const Icon(Icons.map),
-              label: const Text('Select Location'),
             ),
-            const SizedBox(height: 20),
-            _loading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-              onPressed: _submit,
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+            const SizedBox(height: 24),
+
+            Text(
+              "Select Location",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _pickLocation,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[100],
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: _selectedLocation != null
+                    ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.location_on,
+                        color: Colors.blue),
+                    Text(
+                      _address != null && _address!.isNotEmpty
+                          ? _address!
+                          : 'Lat: ${_selectedLocation!.latitude}, Lng: ${_selectedLocation!.longitude}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500),
+                    )
+                  ],
+                )
+                    : const Center(
+                  child: Text(
+                    'Tap to pick location',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
               ),
-              child: const Text('Submit Complaint'),
             ),
+            const SizedBox(height: 80),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _loading ? null : _submit,
+        label: const Text(
+          "Submit",
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(Icons.check, color: Colors.white),
+        backgroundColor: Colors.blue,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
