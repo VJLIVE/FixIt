@@ -37,7 +37,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
     final userCredential = await _auth.signInWithCredential(credential);
 
-    // Save to Firestore if new
     final doc = _firestore.collection('users').doc(userCredential.user!.uid);
     final snap = await doc.get();
     if (!snap.exists) {
@@ -68,10 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
           password: _passwordController.text,
         );
 
-        await _firestore
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
+        await _firestore.collection('users').doc(userCredential.user!.uid).set({
           'name': _nameController.text,
           'branch': _branchController.text,
           'email': _emailController.text,
@@ -100,16 +96,21 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Column(
             children: [
               const SizedBox(height: 30),
-              const FlutterLogo(size: 80),
+              Image.asset(
+                'assets/logo.png',
+                height: 80,
+              ),
               const SizedBox(height: 16),
               Text(
                 isLogin ? 'Welcome Back' : 'Create an Account',
-                style: theme.textTheme.titleLarge,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
                 isLogin
-                    ? 'Login to your account'
+                    ? 'Log in to continue'
                     : 'Sign up to get started',
                 style: theme.textTheme.bodyMedium,
               ),
@@ -148,7 +149,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(
                                   color: isLogin
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Colors.black87,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -172,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(
                                   color: !isLogin
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Colors.black87,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
