@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'select_location_page.dart';
+import 'dashboard_page.dart';
 
 class ComplaintForm extends StatefulWidget {
   const ComplaintForm({super.key});
@@ -34,8 +35,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
   }
 
   Future<String?> _uploadToCloudinary(File image) async {
-    const cloudName = 'your_cloud_name';
-    const uploadPreset = 'your_unsigned_upload_preset';
+    const cloudName = 'dgiqmo1t1';
+    const uploadPreset = 'flutter_unsigned';
 
     final uri = Uri.parse(
         'https://api.cloudinary.com/v1_1/$cloudName/image/upload');
@@ -96,11 +97,30 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
     setState(() => _loading = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Complaint submitted!')),
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Success'),
+        content: const Text('Complaint submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(); // close the dialog
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
 
-    Navigator.pop(context);
+    // then navigate to home page
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const DashboardPage()), // replace HomePage with your actual widget
+          (route) => false, // remove all previous routes
+    );
   }
 
   Future<void> _pickLocation() async {

@@ -1,13 +1,3 @@
-import java.util.Properties
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file(".env")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use { localProperties.load(it) }
-}
-
-val googleMapsApiKey = localProperties["GOOGLE_MAPS_API_KEY"] as String? ?: ""
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -31,7 +21,6 @@ android {
 
     defaultConfig {
         applicationId = "com.example.fixit"
-        resValue("string", "google_maps_api_key", googleMapsApiKey)
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
