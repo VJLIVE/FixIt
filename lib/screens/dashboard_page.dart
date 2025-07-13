@@ -123,7 +123,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.person),
+                      leading: const Icon(Icons.person, color: Colors.blue),
                       title: const Text('Profile'),
                       subtitle: const Text('View or edit your profile info'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -140,14 +140,15 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.settings),
-                      title: const Text('Settings'),
-                      subtitle: const Text('Manage your preferences'),
+                      leading: const Icon(Icons.report_problem_outlined, color: Colors.orange),
+                      title: const Text('Add Complaint'),
+                      subtitle: const Text('Report an issue or complaint'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Settings tapped')),
+                          const SnackBar(content: Text('Add Complaint tapped')),
                         );
+                        // TODO: Navigate to complaint screen
                       },
                     ),
                   ),
@@ -157,7 +158,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.help_outline),
+                      leading: const Icon(Icons.help_outline, color: Colors.green),
                       title: const Text('Help & Support'),
                       subtitle: const Text('Get assistance'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
