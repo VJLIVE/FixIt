@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fixit/screens/complaint_form.dart';
 import 'package:flutter/material.dart';
 import 'auth_screen.dart';
 
@@ -145,10 +146,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       subtitle: const Text('Report an issue or complaint'),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Add Complaint tapped')),
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const ComplaintForm()),
                         );
-                        // TODO: Navigate to complaint screen
                       },
                     ),
                   ),
