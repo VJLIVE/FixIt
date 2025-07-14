@@ -1,7 +1,19 @@
-export default function App() {
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import { AuthProvider } from "./AuthContext"; // Import AuthProvider
+
+function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-blue-100">
-      <h1 className="text-4xl font-bold text-blue-700">Tailwind CSS is working!</h1>
-    </div>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </AuthProvider>
   );
 }
+
+export default App;
