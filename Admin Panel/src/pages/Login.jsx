@@ -12,7 +12,6 @@ export default function Login() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // 👇 Redirect already logged-in admins
   useEffect(() => {
     const checkUserRoleAndRedirect = async () => {
       if (currentUser) {
@@ -54,28 +53,42 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
-        <h1 className="text-2xl font-semibold text-center mb-6">Login</h1>
-        <input
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        />
-        <input
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full p-2 mb-6 border border-gray-300 rounded-lg"
-        />
-        <button
-          onClick={handleSignIn}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
-          disabled={checkingRole}
-        >
-          {checkingRole ? "Checking..." : "Sign In"}
-        </button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-xl p-8 sm:p-10 w-full max-w-md">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-blue-700 mb-2">Admin Login</h1>
+          <p className="text-gray-500 mb-6 text-sm">Sign in to access the admin dashboard</p>
+        </div>
+
+        <div className="space-y-4">
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            onClick={handleSignIn}
+            disabled={checkingRole}
+            className={`w-full py-3 text-white rounded-lg font-medium ${
+              checkingRole
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 transition"
+            }`}
+          >
+            {checkingRole ? "Checking..." : "Sign In"}
+          </button>
+        </div>
+
+        <div className="mt-6 text-center text-xs text-gray-400">
+          © 2025 FixIt Admin Panel
+        </div>
       </div>
     </div>
   );
