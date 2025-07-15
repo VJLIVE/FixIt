@@ -69,7 +69,7 @@ export default function Dashboard() {
         {loading ? (
           <p>Loading complaints...</p>
         ) : complaints.length === 0 ? (
-          <p className="text-gray-500">You have not raised any complaints yet.</p>
+          <p className="text-gray-500">No active complaints yet.</p>
         ) : (
           <div className="grid gap-4">
             {complaints.map((complaint) => (
