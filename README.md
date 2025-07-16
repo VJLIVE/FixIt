@@ -6,18 +6,18 @@ This project uses Firebase for authentication, storage, and database.
 Optionally integrates with AI (Gemini API) for smarter issue categorization.
 
 ### ✨ Features
-👨‍🎓 Student App (Flutter)
-✅ Splash screen — checks login state
-✅ Authentication — Signup/Login with Email/Password or Google
-✅ Role-based access — students can raise/view only their complaints
-✅ Raise a complaint — upload image, write description, submit
-✅ Track complaint — view status (Pending, In Progress, Resolved)
+👨‍🎓 Student App (Flutter):
+- Splash screen — checks login state
+- Authentication — Signup/Login with Email/Password or Google
+- Role-based access — students can raise/view only their complaints
+- Raise a complaint — upload image, write description, submit
+- Track complaint — view status (Pending, In Progress, Resolved)
 
-👨‍💼 Admin Panel (React + Firebase)
-✅ Authentication — Only admins can log in
-✅ View all complaints (by all students)
-✅ Update complaint status (Pending → In Progress → Resolved)
-✅ Responsive and clean UI
+👨‍💼 Admin Panel (React + Firebase):
+- Authentication — Only admins can log in
+- View all complaints (by all students)
+- Update complaint status (Pending → In Progress → Resolved)
+- Responsive and clean UI
 
 ### 🔗 Tech Stack
 | Part                  | Tech/Service                        |
