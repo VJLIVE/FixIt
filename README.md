@@ -29,6 +29,7 @@ Optionally integrates with AI (Gemini API) for smarter issue categorization.
 | Optional AI           | Gemini API (for classification)     |
 
 ## 📱 Student App (Flutter)
+
 - Getting Started:
   ```bash
   cd student-app
