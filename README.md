@@ -2,7 +2,7 @@
 FixIt is a solution for college/university maintenance management.
 Students can raise complaints through a Flutter mobile app, and administrators can view, track, and resolve complaints through a React-based admin panel.
 
-This project uses Firebase for authentication, storage, and database.
+This project uses Firebase for authentication, database and cloudinary API for image storing.
 Optionally integrates with AI (Gemini API) for smarter issue categorization.
 
 ### ✨ Features
